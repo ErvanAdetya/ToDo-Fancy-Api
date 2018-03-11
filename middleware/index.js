@@ -45,5 +45,15 @@ module.exports = {
     },
 
     deleter: (req, res, next) => {
+        let expired = 30; //days
+        let limit = new Date();
+        limit.setDate(limit.getDate() - expired);
+        Todo
+        .remove({
+            finishedAt: {$lt: limit}
+        })
+        .then((todos) => {
+            next()
+        })
     }
-}
+} 
