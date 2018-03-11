@@ -6,8 +6,7 @@ const jwt = require('jsonwebtoken');
 module.exports = {
     create: (req, res) => {
         let newTodo = new Todo ({
-            task: req.body.task,
-            status: false
+            task: req.body.task
         });
         newTodo
         .save()
@@ -66,7 +65,8 @@ module.exports = {
             .then((todo) => {
                 let updateValue = {
                     task: req.body.task || todo.task,
-                    status: req.body.status || todo.status
+                    status: req.body.status || todo.status,
+                    finishedAt: todo.finishedAt
                 }
                 Todo
                     .update(
