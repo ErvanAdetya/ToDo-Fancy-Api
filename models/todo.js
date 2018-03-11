@@ -6,11 +6,8 @@ const schema = mongoose.Schema;
 
 module.exports = mongoose.model('Todo', schema({
     userId: String,
-    name: String,
+    task: String,
     status: Boolean,
-    createdAt: {
-        type: Date,
-        default: Date.now
-    },
+    createdAt:  Date.now,
     finishedAt: Date            
 }))
