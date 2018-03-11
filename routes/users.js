@@ -1,9 +1,12 @@
-var express = require('express');
-var router = express.Router();
+'use strict'
+const router = require('express').Router();
+const {create, readAll, readById, userUpdate, userDelete} = require('../controllers/user.controller');
+const {authentication} = require('../middleware/auth')
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
+router.get('/', readAll);
+router.post('/', create);
+router.get('/:id', authentication, readById);
+router.put('/:id', authentication, userUpdate);
+router.delete('/:id', authentication, userDelete);
 
 module.exports = router;
