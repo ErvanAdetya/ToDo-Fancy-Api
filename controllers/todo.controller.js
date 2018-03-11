@@ -100,6 +100,32 @@ module.exports = {
         })
     },
 
+    userTodoByStatus: (req, res) => {
+        let decoded = jwt.verify(req.headers.token, 'secret');
+        let status = req.params.status
+        if(status == 'finished') {
+            status = true;
+        } else {
+            status = false;
+        }
+        Todo
+        .find({
+            user: decoded.id,
+            status: status
+        })
+        // .populate('user')
+        .exec()
+        .then((todos) => {
+            res.status(200).json(todos);
+        })
+        .catch((err) => {
+            res.status(500).json({
+                message: 'Error!!',
+                err
+            });
+        })
+    },
+
     todoUpdate: (req, res) => {
         Todo
             .findById(req. params.id)
@@ -142,5 +168,28 @@ module.exports = {
             .catch((err) => {
                 res.status(500).send(err);
             })
+    },
+
+    cleaner: (req, res) => {
+        let decoded = jwt.verify(req.headers.token, 'secret');
+        let expired = req.body.days || 30;
+        let limit = new Date();
+        limit.setDate(limit.getDate() - expired);
+        Todo
+        .remove({
+            _id: req.params.id,
+            finishedAt: {$lt: limit}
+        })
+        .then((todos) => {
+            res.status(200).json({
+                message: `You successfully clean you To-Do`,
+                todos
+            })
+        })
+        .catch((err) => {
+            res.status(500).json({
+                message: err
+            })
+        })
     }
 }
