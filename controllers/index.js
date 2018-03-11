@@ -6,6 +6,7 @@ const bcrypt = require('bcrypt');
 
 module.exports = {
     login: (req, res) => {
+        console.log(req.body)
         User
             .findOne({email: req.body.email})
             .then((user) => {
@@ -21,7 +22,6 @@ module.exports = {
                             token: req.headers.token
                         })
                     } else {
-                        console.log('wrong')
                         throw 'Wrong Password!'
                     }
                 } else {

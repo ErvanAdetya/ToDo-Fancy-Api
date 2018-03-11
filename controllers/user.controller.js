@@ -45,20 +45,22 @@ module.exports = {
 
     readById: (req, res) => {
         User
-            .findById(req. params.id)
+            .findById(req.params.id)
             .then((user) => {
                 if(user) {
                     res.status(200).json({
-                        user,
-                        token: token
+                        message: `Welcome ${user.name}`,
+                        user
                     })
                 } else {
-                    reject()
+                    console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!sempat nyari')
+                    throw 'User not found!'
                 }
             })
             .catch((err) => {
-                res.status(500).json({
-                    message: 'User Not Found!!'
+                res.status(404).json({
+                    message: 'User not Found',
+                    err
                 });
             })
     },
