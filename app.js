@@ -1,14 +1,21 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
+const express = require('express');
+const path = require('path');
+const favicon = require('serve-favicon');
+const logger = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 
-var index = require('./routes/index');
-var users = require('./routes/users');
+const dbUrl = 'mongodb://localhost:27017/todo_fancy'
+const index = require('./routes/index');
+const users = require('./routes/users');
 
-var app = express();
+const app = express();
+
+mongoose.connect(dbUrl, (err) => {
+  if(!err) {console.log('Connected to Database');}
+  else {throw new Error(err);}
+})
 
 // view engine setup
 // app.set('views', path.join(__dirname, 'views'));

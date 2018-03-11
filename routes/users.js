@@ -1,9 +1,15 @@
+'use strict'
 var express = require('express');
+const {create, readAll, readById, userUpdate, userDelete} = require('../controllers/user.controller')
+
 var router = express.Router();
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
+// router.get('/', getById);
+
+router.get('/', readAll);
+router.post('/', create);
+router.put('/:id', userUpdate);
+router.delete('/:id', userDelete);
 
 module.exports = router;
