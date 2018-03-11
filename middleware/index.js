@@ -2,6 +2,7 @@
 
 const FB = require('fb');
 const User = require('../models/user');
+const Todo = require('../models/todo');
 
 module.exports = {
     checkUser: (req, res, next) => {
@@ -41,5 +42,8 @@ module.exports = {
             //     response
             // })
         })
+    },
+
+    deleter: (req, res, next) => {
     }
 }

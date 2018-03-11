@@ -100,6 +100,32 @@ module.exports = {
         })
     },
 
+    userTodoByStatus: (req, res) => {
+        let decoded = jwt.verify(req.headers.token, 'secret');
+        let status = req.params.status
+        if(status == 'finished') {
+            status = true;
+        } else {
+            status = false;
+        }
+        Todo
+        .find({
+            user: decoded.id,
+            status: status
+        })
+        // .populate('user')
+        .exec()
+        .then((todos) => {
+            res.status(200).json(todos);
+        })
+        .catch((err) => {
+            res.status(500).json({
+                message: 'Error!!',
+                err
+            });
+        })
+    },
+
     todoUpdate: (req, res) => {
         Todo
             .findById(req. params.id)
