@@ -1,16 +1,12 @@
 'use strict'
-var express = require('express');
-const {create, readAll, readById, userUpdate, userDelete} = require('../controllers/user.controller')
-
-var router = express.Router();
-
-/* GET users listing. */
-// router.get('/', getById);
+const router = require('express').Router();
+const {create, readAll, readById, userUpdate, userDelete} = require('../controllers/user.controller');
+const {authentication} = require('../middleware/auth')
 
 router.get('/', readAll);
 router.post('/', create);
-router.get('/:id', readById);
-router.put('/:id', userUpdate);
-router.delete('/:id', userDelete);
+router.get('/:id', authentication, readById);
+router.put('/:id', authentication, userUpdate);
+router.delete('/:id', authentication, userDelete);
 
 module.exports = router;

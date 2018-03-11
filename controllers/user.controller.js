@@ -1,9 +1,11 @@
 'use strict'
 
-const User = require('../models/user')
+const User = require('../models/user');
+const jwt = require('jsonwebtoken');
 
 module.exports = {
     create: (req, res) => {
+        console.log(req.body)
         let newUser = new User ({
             fbId: req.body.fbId,
             name: req.body.name,
@@ -43,13 +45,21 @@ module.exports = {
 
     readById: (req, res) => {
         User
-            .findById(req. params.id)
+            .findById(req.params.id)
             .then((user) => {
-                res.status(200).send(user)
+                if(user) {
+                    res.status(200).json({
+                        message: `Welcome ${user.name}`,
+                        user
+                    })
+                } else {
+                    console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!sempat nyari')
+                    throw 'User not found!'
+                }
             })
             .catch((err) => {
-                res.status(500).json({
-                    message: 'Error!!',
+                res.status(404).json({
+                    message: 'User not Found',
                     err
                 });
             })
