@@ -9,6 +9,7 @@ const mongoose = require('mongoose');
 const dbUrl = 'mongodb://localhost:27017/todo_fancy'
 const index = require('./routes/index');
 const users = require('./routes/users');
+const todos = require('./routes/todos')
 
 const app = express();
 
@@ -31,6 +32,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/users', users);
+app.use('/todos', todos);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -5,7 +5,7 @@ module.exports = {
     authentication: (req, res, next) => {
         try {
             let decoded = jwt.verify(req.headers.token, 'secret');
-            if(decoded.id == req.params.id) {
+            if(decoded.id == req.params.userId) {
                 next()
             } else {
                 throw new Error('Bad Authentication!');
