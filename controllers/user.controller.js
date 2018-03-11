@@ -13,11 +13,16 @@ module.exports = {
         newUser
         .save()
         .then((response) => {
-            console.log('wew')
-            res.status(201).send(status)
+            res.status(201).json({
+                message: "New User Created!",
+                response
+            })
         })
         .catch((err) => {
-            res.status(500).send(err);            
+            res.status(500).json({
+                message: 'Error Creating User!!',
+                err
+            });
         })
     },
 
@@ -29,15 +34,54 @@ module.exports = {
             res.status(200).send(users);
         })
         .catch((err) => {
-            res.status(500).send(err);
+            res.status(500).json({
+                message: 'Error!!',
+                err
+            });
         })
     },
 
     readById: (req, res) => {
+        User
+            .findById(req. params.id)
+            .then((user) => {
+                res.status(200).send(user)
+            })
+            .catch((err) => {
+                res.status(500).json({
+                    message: 'Error!!',
+                    err
+                });
+            })
     },
 
     userUpdate: (req, res) => {
-
+        User
+            .findById(req. params.id)
+            .then((user) => {
+                let updateValue = {
+                    name: req.body.name || user.name,
+                    password: req.body.password || user.password
+                }
+                User
+                    .update(
+                        { _id: user._id},
+                        {$set: updateValue}
+                    )
+                    .then((response) => {
+                        return res.status(200).json({
+                            message: "User Data Updated!",
+                            response
+                        })
+                    })
+                    .catch((err) => {reject()})
+            })
+            .catch((err) => {
+                res.status(500).json({
+                    message: 'Error!!',
+                    err
+                });
+            })
     },
 
     userDelete: (req, res) => {

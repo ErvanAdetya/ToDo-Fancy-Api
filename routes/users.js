@@ -9,6 +9,7 @@ var router = express.Router();
 
 router.get('/', readAll);
 router.post('/', create);
+router.get('/:id', readById);
 router.put('/:id', userUpdate);
 router.delete('/:id', userDelete);
 
