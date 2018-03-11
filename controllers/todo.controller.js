@@ -4,8 +4,10 @@ const Todo = require('../models/todo');
 const jwt = require('jsonwebtoken');
 
 module.exports = {
-    create: (req, res) => {
+    createTodo: (req, res) => {
+        let decoded = jwt.verify(req.headers.token, 'secret');
         let newTodo = new Todo ({
+            user: decoded.id,
             task: req.body.task
         });
         newTodo
@@ -27,6 +29,7 @@ module.exports = {
     readAll: (req, res) => {
         Todo
         .find()
+        .populate('user')
         .exec()
         .then((todos) => {
             res.status(200).send(todos);
@@ -42,6 +45,7 @@ module.exports = {
     readById: (req, res) => {
         Todo
             .findById(req.params.id)
+            .populate('user')            
             .then((todo) => {
                 if(todo) {
                     res.status(200).json({
@@ -57,6 +61,43 @@ module.exports = {
                     err
                 });
             })
+    },
+
+    userTodo: (req, res) => {
+        let decoded = jwt.verify(req.headers.token, 'secret');
+        Todo
+        .find({user: decoded.id})
+        // .populate('user')
+        .exec()
+        .then((todos) => {
+            res.status(200).send(todos);
+        })
+        .catch((err) => {
+            res.status(500).json({
+                message: 'Error!!',
+                err
+            });
+        })
+    },
+
+    userTodoById: (req, res) => {
+        let decoded = jwt.verify(req.headers.token, 'secret');
+        Todo
+        .findOne({
+            user: decoded.id,
+            _id: req.params.id
+        })
+        // .populate('user')
+        .exec()
+        .then((todo) => {
+            res.status(200).send(todo);
+        })
+        .catch((err) => {
+            res.status(500).json({
+                message: 'Error!!',
+                err
+            });
+        })
     },
 
     todoUpdate: (req, res) => {

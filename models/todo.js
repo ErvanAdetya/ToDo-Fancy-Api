@@ -5,7 +5,10 @@ const mongoose = require('mongoose');
 const schema = mongoose.Schema;
 
 module.exports = mongoose.model('Todo', schema({
-    userId: String,
+    user: {
+        type: schema.Types.ObjectId,
+        ref: 'User'
+    },
     task: String,
     status: {
         type: Boolean,
