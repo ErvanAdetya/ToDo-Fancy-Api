@@ -128,7 +128,7 @@ module.exports = {
 
     todoUpdate: (req, res) => {
         Todo
-            .findById(req. params.id)
+            .findById(req.params.id)
             .then((todo) => {
                 let updateValue = {
                     task: req.body.task || todo.task,
