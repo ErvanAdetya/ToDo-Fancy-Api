@@ -45,7 +45,7 @@ module.exports = {
 
     readById: (req, res) => {
         User
-            .findById(req.params.id)
+            .findById(req.params.userId)
             .then((user) => {
                 if(user) {
                     res.status(200).json({
@@ -67,7 +67,7 @@ module.exports = {
 
     userUpdate: (req, res) => {
         User
-            .findById(req. params.id)
+            .findById(req. params.userId)
             .then((user) => {
                 let updateValue = {
                     name: req.body.name || user.name,
@@ -96,7 +96,7 @@ module.exports = {
 
     userDelete: (req, res) => {
         User
-            .remove({_id: req.params.id})
+            .remove({_id: req.params.userId})
             .then((response) => {
                 res.status(200).json({
                     message: "User successfully deleted",
