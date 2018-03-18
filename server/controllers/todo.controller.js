@@ -5,10 +5,11 @@ const jwt = require('jsonwebtoken');
 
 module.exports = {
     createTodo: (req, res) => {
-        let decoded = jwt.verify(req.headers.token, 'secret');
+        let decoded = jwt.verify(req.headers.apptoken, process.env.JWT);
         let newTodo = new Todo ({
             user: decoded.id,
-            task: req.body.task
+            title: req.body.title,
+            description: req.body.description
         });
         newTodo
         .save()
@@ -64,13 +65,15 @@ module.exports = {
     },
 
     userTodo: (req, res) => {
-        let decoded = jwt.verify(req.headers.token, 'secret');
+        let decoded = jwt.verify(req.headers.apptoken, process.env.JWT);
         Todo
         .find({user: decoded.id})
         // .populate('user')
         .exec()
         .then((todos) => {
-            res.status(200).send(todos);
+            res.status(200).json({
+                todos
+            });
         })
         .catch((err) => {
             res.status(500).json({
@@ -158,16 +161,16 @@ module.exports = {
 
     todoDelete: (req, res) => {
         Todo
-            .remove({_id: req.params.id})
-            .then((response) => {
-                res.status(200).json({
-                    message: "Todo successfully deleted",
-                    response
-                })
+        .remove({_id: req.params.id})
+        .then((response) => {
+            res.status(200).json({
+                message: "Todo successfully deleted",
+                response
             })
-            .catch((err) => {
-                res.status(500).send(err);
-            })
+        })
+        .catch((err) => {
+            res.status(500).send(err);
+        })
     },
 
     cleaner: (req, res) => {

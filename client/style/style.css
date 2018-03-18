@@ -1,0 +1,18 @@
+body {
+  background-color: #51504f;
+}
+
+.add-todo-btn {
+  min-width: 100%;
+  padding: 0;
+  margin-bottom: 35px;
+  background-color: #563d7c;
+  color: rgb(194, 194, 194);
+}
+
+.todo {
+  margin-top: 10px;
+  padding: 3px;
+  background-color: whitesmoke;
+  height: 45px;
+}

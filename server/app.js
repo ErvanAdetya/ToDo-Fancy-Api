@@ -1,14 +1,16 @@
 'use strict'
 
+require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const cors = require('cors');
 
-const dbUrl = 'mongodb://localhost:27017/todo_fancy'
+const dbUrl = 'mongodb://localhost:27017/todo_fancy';
 const index = require('./routes/index');
 const users = require('./routes/users');
-const todos = require('./routes/todos')
+const todos = require('./routes/todos');
 
 const app = express();
 
@@ -17,10 +19,9 @@ mongoose.connect(dbUrl, (err) => {
   else {throw new Error(err);}
 })
 
-app.use(logger('dev'));
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);

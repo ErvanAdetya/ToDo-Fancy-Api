@@ -10,31 +10,31 @@ const FB = require('fb');
 module.exports = {
     login: (req, res) => {
         User
-            .findOne({email: req.body.email})
-            .then((user) => {
-                if(user) {
-                    if(bcrypt.compareSync(req.body.password, user.password)) {
-                        req.headers.token = jwt.sign({
-                            id: user._id,
-                            fbId: user.fbId
-                        }, 'secret');
-                        res.status(200).json({
-                            message: 'Signin successfull!',
-                            user,
-                            token: req.headers.token
-                        })
-                    } else {
-                        throw 'Wrong Password!'
-                    }
+        .findOne({email: req.body.email})
+        .then((user) => {
+            if(user) {
+                if(bcrypt.compareSync(req.body.password, user.password)) {
+                    req.headers.token = jwt.sign({
+                        id: user._id,
+                        fbId: user.fbId
+                    }, 'secret');
+                    res.status(200).json({
+                        message: 'Signin successfull!',
+                        user,
+                        token: req.headers.token
+                    })
                 } else {
-                    throw 'Email not found!'
+                    throw 'Wrong Password!'
                 }
-            })
-            .catch((err) => {
-                res.status(500).json({
-                    message: err
-                });
-            })
+            } else {
+                throw 'Email not found!'
+            }
+        })
+        .catch((err) => {
+            res.status(500).json({
+                message: err
+            });
+        })
     },
 
     fbLogin: (req, res) => {
@@ -47,12 +47,16 @@ module.exports = {
                     email: response.email,
                 })
                 .then((user) => {
-                    res.status(200).json({
-                        user
+                    let token = jwt.sign({
+                        id: user._id
+                    }, process.env.JWT);
+                    return res.status(200).json({
+                        user,
+                        apptoken: token
                     })
                 })
                 .catch((err) => {
-                    res.status(500).json({
+                    return res.status(500).json({
                         message: err
                     })
                 })

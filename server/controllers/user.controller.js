@@ -5,7 +5,6 @@ const jwt = require('jsonwebtoken');
 
 module.exports = {
     create: (req, res) => {
-        console.log(req.body)
         let newUser = new User ({
             fbId: req.body.fbId,
             name: req.body.name,
@@ -53,7 +52,6 @@ module.exports = {
                         user
                     })
                 } else {
-                    console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!sempat nyari')
                     throw 'User not found!'
                 }
             })
