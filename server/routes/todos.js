@@ -1,15 +1,13 @@
 'use strict'
 const router = require('express').Router();
-const {createTodo, readAll, readById, todoUpdate, todoDelete, userTodo} = require('../controllers/todo.controller');
+const {todoCreate, todoReadByUser, todoUpdate, todoDelete, changeStatus} = require('../controllers/todo.controller');
 const {authentication} = require('../middlewares/auth')
 
-router.post('/', userTodo);
-router.post('/new', createTodo);
-router.delete('/:id', todoDelete);
+router.get('/', todoReadByUser);
+router.post('/', todoCreate);
+router.put('/', todoUpdate);
+router.delete('/', todoDelete);
 
-// router.get('/:id', readById);
-// router.put('/:id', todoUpdate);
-// router.delete('/:id', todoDelete);
-// router.get('/all', readAll)
+router.put('/changestatus', changeStatus);
 
 module.exports = router;

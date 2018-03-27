@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken')
 
 module.exports = {
     authentication: (req, res, next) => {
+        console.log('wow')
         try {
             let decoded = jwt.verify(req.headers.apptoken, 'secret');
             if(decoded.id == req.params.userId) {

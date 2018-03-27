@@ -39,14 +39,13 @@ Vue.component('new-todo-comp', {
 
     methods: {
         createTodo: function() {
-            axios.post('http://localhost:3000/todos/new', {
+            axios.post('http://localhost:3000/todos', {
                 title: this.title,
                 description: this.description
             },
             {headers: {apptoken: localStorage.getItem('apptoken')}})
             .then((response) => {
-                console.log(response);
-                window.location.href="index.html"
+                this.$emit('add-todo', response.data.todo);
             });
         },
     }

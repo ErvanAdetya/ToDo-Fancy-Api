@@ -5,8 +5,6 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const FB = require('fb');
 
-// const fbToken = "EAADgOecnlf0BAOPGzu6mS9528Q03jbzuFckyaRYKY8k7TDhhh1LDo5CcpLSgXyp58J6QDB2cQ2bc3uZBoTzvnnCy67T6kIbQF92wxo6SVeE3B70VQaFTHr3ZBDPJlThZAqxf0QCjEEV9oKopiwFm1a1fbZArOXdZApgUqOvK4tCh0O1TFED94ZCrXHrOvmaAREJjaZCuAl7IQZDZD"
-
 module.exports = {
     login: (req, res) => {
         User
@@ -17,7 +15,7 @@ module.exports = {
                     req.headers.token = jwt.sign({
                         id: user._id,
                         fbId: user.fbId
-                    }, 'secret');
+                    }, process.env.JWT);
                     res.status(200).json({
                         message: 'Signin successfull!',
                         user,
@@ -39,7 +37,6 @@ module.exports = {
 
     fbLogin: (req, res) => {
         FB.setAccessToken(req.headers.fbtoken);
-        // FB.setAccessToken(fbToken);
         FB.api('/me',{fields: ['id', 'name', 'gender','email']} , function(response) {
             User
                 .findOne({
@@ -61,5 +58,22 @@ module.exports = {
                     })
                 })
         })
+    },
+
+    verify: (req, res) => {
+        try {
+            let decoded = jwt.verify(req.headers.apptoken, process.env.JWT);
+            User
+            .find({_id: decoded.id})
+            .then((user) => {
+                if(user) {
+                    return res.status(200).send(true)
+                } else {
+                    return res.status(500).send(false)
+                }
+            })
+        } catch(err) {
+            return res.status(500).send(false)            
+        }
     }
 }

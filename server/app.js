@@ -7,7 +7,8 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const cors = require('cors');
 
-const dbUrl = 'mongodb://localhost:27017/todo_fancy';
+// const dbUrl = 'mongodb://localhost:27017/todo_fancy';
+const dbUrl = process.env.DB;
 const index = require('./routes/index');
 const users = require('./routes/users');
 const todos = require('./routes/todos');
