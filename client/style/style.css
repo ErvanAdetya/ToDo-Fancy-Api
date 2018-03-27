@@ -1,0 +1,54 @@
+body {
+  background-color: whitesmoke;
+}
+.form-button{
+  margin-left: 30%;
+}
+.regis {
+  cursor: pointer;
+}
+
+.regis:hover {
+  color: rgb(175, 110, 35)
+}
+
+.login-fb {
+  text-align: right
+}
+
+.todo-box {
+  box-shadow: 0px 0px 138px -15px rgba(0,0,0,0.58);
+  padding: 0
+}
+
+.add-todo-btn {
+  min-width: 100%;
+  padding: 0;
+  background-color: #563d7c;
+  color: rgb(194, 194, 194);
+}
+.add-todo-btn:hover {
+  box-shadow: 0px 0px 45px 1px rgba(0,0,0,0.35);
+}
+
+.todo {
+  padding: 3px;
+  background-color: whitesmoke;
+  height: 45px;
+  cursor: pointer;
+  box-shadow: inset 0px 36px 103px -80px rgba(0,0,0,0.58);
+}
+.todo:hover {
+  color: #563d7c;
+  box-shadow: inset 0px 0px 77px -23px rgba(0,0,0,0.35);
+}
+
+
+a {
+  color: black;
+}
+
+a:hover {
+  text-decoration: none;
+  color: #563d7c;
+}

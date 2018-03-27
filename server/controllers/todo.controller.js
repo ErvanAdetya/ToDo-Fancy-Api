@@ -4,18 +4,19 @@ const Todo = require('../models/todo');
 const jwt = require('jsonwebtoken');
 
 module.exports = {
-    createTodo: (req, res) => {
-        let decoded = jwt.verify(req.headers.token, 'secret');
+    todoCreate: (req, res) => {
+        let decoded = jwt.verify(req.headers.apptoken, process.env.JWT);
         let newTodo = new Todo ({
             user: decoded.id,
-            task: req.body.task
+            title: req.body.title,
+            description: req.body.description
         });
         newTodo
         .save()
         .then((response) => {
             res.status(201).json({
                 message: "New Todo Created!",
-                response
+                todo: response
             })
         })
         .catch((err) => {
@@ -24,6 +25,25 @@ module.exports = {
                 err
             });
         })
+    },
+
+    todoReadByUser: (req, res) => {
+        let decoded = jwt.verify(req.headers.apptoken, process.env.JWT);
+        Todo
+            .find({user: decoded.id})
+            // .populate('user')
+            .exec()
+            .then((todos) => {
+                res.status(200).json({
+                    todos
+                });
+            })
+            .catch((err) => {
+                res.status(500).json({
+                    message: 'Error!!',
+                    err
+                });
+            })
     },
 
     readAll: (req, res) => {
@@ -63,43 +83,6 @@ module.exports = {
             })
     },
 
-    userTodo: (req, res) => {
-        let decoded = jwt.verify(req.headers.token, 'secret');
-        Todo
-        .find({user: decoded.id})
-        // .populate('user')
-        .exec()
-        .then((todos) => {
-            res.status(200).send(todos);
-        })
-        .catch((err) => {
-            res.status(500).json({
-                message: 'Error!!',
-                err
-            });
-        })
-    },
-
-    userTodoById: (req, res) => {
-        let decoded = jwt.verify(req.headers.token, 'secret');
-        Todo
-        .findOne({
-            user: decoded.id,
-            _id: req.params.id
-        })
-        // .populate('user')
-        .exec()
-        .then((todo) => {
-            res.status(200).send(todo);
-        })
-        .catch((err) => {
-            res.status(500).json({
-                message: 'Error!!',
-                err
-            });
-        })
-    },
-
     userTodoByStatus: (req, res) => {
         let decoded = jwt.verify(req.headers.token, 'secret');
         let status = req.params.status
@@ -128,12 +111,11 @@ module.exports = {
 
     todoUpdate: (req, res) => {
         Todo
-            .findById(req.params.id)
+            .findById(req.headers.todoid)
             .then((todo) => {
                 let updateValue = {
-                    task: req.body.task || todo.task,
-                    status: req.body.status || todo.status,
-                    finishedAt: todo.finishedAt
+                    title: req.body.title || todo.title,
+                    description: req.body.description || todo.description
                 }
                 Todo
                     .update(
@@ -156,18 +138,66 @@ module.exports = {
             })
     },
 
-    todoDelete: (req, res) => {
+    changeStatus: (req, res) => {
+        let decoded = jwt.verify(req.headers.apptoken, process.env.JWT);        
+        let status = !req.body.status;
+        let todoId = req.body.todoid
         Todo
-            .remove({_id: req.params.id})
-            .then((response) => {
-                res.status(200).json({
-                    message: "Todo successfully deleted",
-                    response
-                })
+            .findById(todoId)
+            .then((todo) => {
+                let updateValue = {
+                    status: status
+                }
+                Todo
+                    .update(
+                        { _id: todo._id},
+                        {$set: updateValue}
+                    )
+                    .then((response) => {
+                        return res.status(200).json({
+                            message: "Status Changed",
+                            response
+                        })
+                    })
+                    .catch((err) => {reject()})
             })
             .catch((err) => {
-                res.status(500).send(err);
+                res.status(500).json({
+                    message: 'Error!!',
+                    err
+                });
             })
+    },
+
+    todoDelete: (req, res) => {
+        let decoded = jwt.verify(req.headers.apptoken, process.env.JWT);
+        Todo
+            .findById(req.headers.todoid)
+            .then((todo) => {
+                if(todo) {
+                    if(decoded.id == todo.user) {
+                        Todo
+                            .remove({_id: req.headers.todoid})
+                            .then((response) => {
+                                res.status(200).json({
+                                    message: "Todo successfully deleted",
+                                    response
+                                })
+                            })
+                            .catch((err) => {
+                                res.status(500).send(err);
+                            })
+                    }
+                } else {
+                    reject();
+                }
+            })
+            .catch((err) => {
+                res.status(500).json({
+                    message: 'Error!!',
+                    err
+                });
+            })    
     },
 
     cleaner: (req, res) => {

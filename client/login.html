@@ -19,48 +19,13 @@
 </head>
 <body>
 <div id="app">
-    <!-- <nav-comp></nav-comp> -->
-
-    <div class='container mt-5'>
-        <div class="col-md-6 offset-md-3 todo-box">
-            <head-comp></head-comp>
-            <button type="button" class="btn add-todo-btn" data-toggle="modal" data-target="#new-todo">
-                Add Todo
-            </button>
-            <div class="container todos" v-for='todo in todos'>
-                <todo-comp
-                    :id='todo._id'
-                    :title='todo.title' 
-                    :description='todo.description'
-                    :status='todo.status'
-                    @select-todo="selecttodo"
-                    @change-status="changestatus"
-                    @delete-todo="deletetodo"
-                    >
-                </todo-comp>
-            </div>
-        </div>
-    </div>
-    <new-todo-comp
-        v-on:add-todo='addtodo'
-    ></new-todo-comp>
-
-    <todo-modal-comp
-        :id='selectedtodo._id'
-        :title='selectedtodo.title' 
-        :description='selectedtodo.description'
-        :status='selectedtodo.status'
-        @update-status='updatestatus'
-    ></todo-modal-comp>
-
-    <div class="mt-5 mb-5"></div>
+    <login-comp></login-comp>
+    <register-comp></register-comp>
 </div>
+<script src="js/register-modal.js"></script>
 <script src="js/nav-component.js"></script>
-<script src="js/new-todo-component.js"></script>
-<script src="js/todo-component.js"></script>
-<script src="js/todo-modal-component.js"></script>
-<script src="js/head-component.js"></script>
-<script src="js/app.js"></script>     
-<script src="js/fb.js"></script>  
+<script src="js/login-component.js"></script>
+<script src="js/app.js"></script> 
+<script src="./js/fb.js"></script>
 </body>
 </html>

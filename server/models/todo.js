@@ -9,7 +9,8 @@ module.exports = mongoose.model('Todo', schema({
         type: schema.Types.ObjectId,
         ref: 'User'
     },
-    task: String,
+    title: String,
+    description: String,
     status: {
         type: Boolean,
         default: false
